@@ -1,32 +1,47 @@
 import React, { useState } from "react";
 
 function App() {
-  const [fields, setFields] = useState([
-    { name: "", age: "" }
+  const [formData, setFormData] = useState([
+    {
+      name: "",
+      age: ""
+    }
   ]);
 
-  // Add a new Name + Age field
+  // Add new field
   const addField = () => {
-    setFields([...fields, { name: "", age: "" }]);
+    setFormData([
+      ...formData,
+      {
+        name: "",
+        age: ""
+      }
+    ]);
   };
 
-  // Update Name or Age
-  const handleChange = (index, field, value) => {
-    const updatedFields = [...fields];
-    updatedFields[index][field] = value;
-    setFields(updatedFields);
+  // Update field
+  const handleChange = (index, e) => {
+    const { name, value } = e.target;
+
+    const updatedData = [...formData];
+
+    updatedData[index][name] = value;
+
+    setFormData(updatedData);
   };
 
-  // Remove a specific field
+  // Remove field
   const removeField = (index) => {
-    const updatedFields = fields.filter((_, i) => i !== index);
-    setFields(updatedFields);
+    const updatedData = formData.filter((_, i) => i !== index);
+
+    setFormData(updatedData);
   };
 
-  // Submit form
+  // Submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(fields);
+
+    console.log(formData);
   };
 
   return (
@@ -34,31 +49,23 @@ function App() {
       <h1>Dynamic Form</h1>
 
       <form onSubmit={handleSubmit}>
-        {fields.map((field, index) => (
+        {formData.map((data, index) => (
           <div key={index}>
-            <label>
-              Name:
-              <input
-                type="text"
-                value={field.name}
-                placeholder="Name"
-                onChange={(e) =>
-                  handleChange(index, "name", e.target.value)
-                }
-              />
-            </label>
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              value={data.name}
+              onChange={(e) => handleChange(index, e)}
+            />
 
-            <label>
-              Age:
-              <input
-                type="number"
-                value={field.age}
-                placeholder="Age"
-                onChange={(e) =>
-                  handleChange(index, "age", e.target.value)
-                }
-              />
-            </label>
+            <input
+              type="number"
+              name="age"
+              placeholder="Age"
+              value={data.age}
+              onChange={(e) => handleChange(index, e)}
+            />
 
             <button
               type="button"
@@ -76,7 +83,6 @@ function App() {
         <button type="submit">
           Submit
         </button>
-        <p>After clicking submit check console for data</p>
       </form>
     </div>
   );
